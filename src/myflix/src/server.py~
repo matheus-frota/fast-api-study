@@ -1,0 +1,23 @@
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+
+from src.ingra.sqlalchemy.config.database import criar_bd, get_db
+from src.ingra.sqlalchemy.models.models import models_serie
+from src.ingra.sqlalchemy.repositorios.serie import RepositorioSerie
+from src.schemas.schemas import Serie as schema_serie
+
+
+criar_bd()
+
+
+app = FastAPI()
+
+
+@app.post('/series')
+def inserir_serie(serie: schema_serie, db: Session=Depends(get_db)):
+    return RepositorioSerie(db).criar(serie)
+
+
+@app.get('/series')
+def listar_todos(db: Session=Depends(get_db)):
+    return RepositorioSerie(db).listar()

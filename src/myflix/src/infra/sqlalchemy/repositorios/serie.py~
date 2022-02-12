@@ -1,0 +1,29 @@
+from sqlalchemy.orm import Session
+
+from src.schemas import schemas
+from src.infra.sqlalchemy.models import models
+
+
+class RepositorioSerie():
+
+    def __init__(self, db: Session):
+        self.db = db
+
+    def criar(self, produto: schemas.Serie):
+        db_serie = models.Serie(
+            titulo=produto.titulo,
+            ano=produto.ano,
+            genero=produto.genero,
+            qtd_temporadas=produto.qtd_temporadas
+        )
+
+        self.db.add(db_serie)
+        self.db.commit()
+        self.db.refresh(db_serie)
+        return db_serie
+
+    def listar(self):
+        return self.db.query(models.Serie).all()
+
+    def selecionar_id(self, id: schemas.Serie.id):
+        return self.db.query(models.Serie).filter(id=id)

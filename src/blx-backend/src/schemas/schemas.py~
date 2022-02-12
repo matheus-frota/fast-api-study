@@ -1,0 +1,32 @@
+from typing import List, Optional
+
+from pydantic import BaseModel
+
+
+class Usuario(BaseModel):
+    id: Optional[str] = None
+    nome: str
+    telefone: str
+    meus_produtos: List[Produto]
+    vendas: List[Pedido]
+    pedidos: List[Pedido]
+
+
+class Produto(BaseModel):
+    id: Optional[str] = None
+    usuario: Usuario
+    nome: str
+    detalhamento: str
+    preco: float
+    disponibilidade: bool = False
+
+
+class Pedido(BaseModel):
+    id: Optional[str] = None
+    usuario_vendedor: Usuario
+    usuario_comprador: Usuario
+    produto: Produto
+    quantidade: int
+    local: str
+    envio: str
+    observacao: Optional[str] = ''
